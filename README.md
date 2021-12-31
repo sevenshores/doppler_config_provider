@@ -16,8 +16,6 @@ def deps do
 end
 ```
 
-The docs can be found at <https://hexdocs.pm/doppler_config_provider>.
-
 ## Usage
 
  1. Generate a [service token](https://docs.doppler.com/docs/enclave-service-tokens).
