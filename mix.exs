@@ -28,7 +28,6 @@ defmodule DopplerConfigProvider.MixProject do
   defp deps do
     [
       {:jason, "~> 1.3", optional: true},
-      {:finch, "~> 0.10", optional: true},
       {:mojito, "~> 0.7.10", optional: true},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},

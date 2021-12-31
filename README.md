@@ -1,5 +1,9 @@
 # DopplerConfigProvider
 
+[![Tests](https://github.com/sevenshores/doppler_config_provider/actions/workflows/tests.yml/badge.svg)](https://github.com/sevenshores/doppler_config_provider/actions/workflows/tests.yml)
+ [![Hex.pm](https://img.shields.io/hexpm/dt/doppler_config_provider)](https://hex.pm/packages/doppler_config_provider)
+ [![Hex.pm](https://img.shields.io/hexpm/l/doppler_config_provider)](https://hex.pm/packages/doppler_config_provider)
+
 [Doppler](https://doppler.com) ConfigProvider for [Elixir](https://elixir-lang.org/) projects.
 
 ## Installation
