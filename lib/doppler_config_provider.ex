@@ -13,9 +13,7 @@ defmodule DopplerConfigProvider do
 
   @type json_module :: module() | {atom(), module()}
 
-  @type mappings ::
-          %{optional(String.t()) => {atom(), atom()}}
-          | %{optional(String.t()) => {atom(), module(), atom()}}
+  @type mappings :: %{required(String.t()) => [key :: term()]}
 
   @type options :: [
           {:service_token, service_token()}
@@ -24,12 +22,12 @@ defmodule DopplerConfigProvider do
           | {:mappings, mappings()}
         ]
 
-  @opaque map_options :: %{
-            service_token: service_token(),
-            http_module: http_module(),
-            json_module: json_module(),
-            mappings: mappings()
-          }
+  @type map_options :: %{
+          service_token: service_token(),
+          http_module: http_module(),
+          json_module: json_module(),
+          mappings: mappings()
+        }
 
   @doppler_url "https://api.doppler.com/v3/configs/config/secrets/download"
 
