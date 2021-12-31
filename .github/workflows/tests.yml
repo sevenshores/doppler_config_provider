@@ -70,8 +70,9 @@ jobs:
 
       # Create PLTs if no cache was found
       - name: Create PLTs
-        if: steps.plt_cache.outputs.cache-hit != 'true'
+        if: steps.plt_cache.outputs.cache-hit != 'true' && ${{ matrix.otp != '23.x' }}
         run: mix dialyzer --plt
 
       - name: Run dialyzer
+        if: ${{ matrix.otp != '23.x' }}
         run: mix dialyzer --list-unused-filters --format short
