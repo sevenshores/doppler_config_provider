@@ -1,6 +1,7 @@
 # DopplerConfigProvider
 
 [![Tests](https://github.com/sevenshores/doppler_config_provider/actions/workflows/tests.yml/badge.svg)](https://github.com/sevenshores/doppler_config_provider/actions/workflows/tests.yml)
+ [![Hex.pm](https://img.shields.io/hexpm/v/doppler_config_provider)](https://github.com/sevenshores/doppler_config_provider/actions/workflows/tests.yml)
  [![Hex.pm](https://img.shields.io/hexpm/dt/doppler_config_provider)](https://hex.pm/packages/doppler_config_provider)
  [![Hex.pm](https://img.shields.io/hexpm/l/doppler_config_provider)](https://www.apache.org/licenses/LICENSE-2.0)
 
@@ -13,7 +14,7 @@ The package can be installed by adding `:doppler_config_provider` to your list o
 ```elixir
 def deps do
   [
-    {:doppler_config_provider, "~> 0.1.0"},
+    {:doppler_config_provider, "~> 0.2.0"},
     # Mojito is optional, but it is the default if you don't specify `:http_module` in options.
     {:mojito, "~> 0.7.10"},
   ]

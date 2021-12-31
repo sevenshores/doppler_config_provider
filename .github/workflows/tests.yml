@@ -50,12 +50,11 @@ jobs:
       - name: Run credo
         run: mix credo
 
-      # TODO
-      # - name: Compile test
-      #   run: MIX_ENV=test mix compile --warnings-as-errors
+      - name: Compile test
+        run: MIX_ENV=test mix compile --warnings-as-errors
 
-      # - name: Run tests
-      #   run: mix test
+      - name: Run tests
+        run: mix test
 
       # Don't cache PLTs based on mix.lock hash, as Dialyzer can incrementally update even old ones
       # Cache key based on Elixir & Erlang version (also usefull when running in matrix)
