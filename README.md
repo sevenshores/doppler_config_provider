@@ -29,9 +29,9 @@ end
 ### Options
 
  * `:service_token` (required) - The Doppler service token.
- * `:http_module` (optional) - The Doppler service token. Defaults to `{:mojito, Mojito}`.
- * `:json_module` (optional) - The Doppler service token. Defaults to `{:jason, Jason}` or `{:poison, Poison}`.
- * `:mappings` (required) - The Doppler service token.
+ * `:http_module` (optional) - The HTTP Client module. Defaults to `{:mojito, Mojito}`.
+ * `:json_module` (optional) - The JSON decoding module. Defaults to `{:jason, Jason}` or `{:poison, Poison}`.
+ * `:mappings` (required) - A map specifying how to translate the Doppler config to application config.
 
 Note: The options provided to the config provider in `releases` are merged with
 the config provided in your config files.
