@@ -43,9 +43,9 @@ defmodule DopplerConfigProviderTest do
     opts = [
       service_token: "foobar",
       mappings: %{
-        "STRIPE_SECRET" => {:stripity_stripe, :api_key},
-        "STRIPE_PUBLIC" => {:stripity_stripe, :public_key},
-        "DATABASE_URL" => {:doppler_config_provider, DopplerConfigProvider.Repo, :url}
+        "STRIPE_SECRET" => [:stripity_stripe, :api_key],
+        "STRIPE_PUBLIC" => [:stripity_stripe, :public_key],
+        "DATABASE_URL" => [:doppler_config_provider, DopplerConfigProvider.Repo, :url]
       }
     ]
 
@@ -79,9 +79,9 @@ defmodule DopplerConfigProviderTest do
       http_module: Mojito,
       json_module: Jason,
       mappings: %{
-        "STRIPE_SECRET" => {:stripity_stripe, :api_key},
-        "STRIPE_PUBLIC" => {:stripity_stripe, :public_key},
-        "DATABASE_URL" => {:doppler_config_provider, DopplerConfigProvider.Repo, :url}
+        "STRIPE_SECRET" => [:stripity_stripe, :api_key],
+        "STRIPE_PUBLIC" => [:stripity_stripe, :public_key],
+        "DATABASE_URL" => [:doppler_config_provider, DopplerConfigProvider.Repo, :url]
       }
     ]
 

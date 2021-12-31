@@ -14,7 +14,7 @@ The package can be installed by adding `:doppler_config_provider` to your list o
 ```elixir
 def deps do
   [
-    {:doppler_config_provider, "~> 0.2.1"},
+    {:doppler_config_provider, "~> 0.2.2"},
     # Mojito is optional, but it is the default if you don't specify `:http_module` in options.
     {:mojito, "~> 0.7.10"},
   ]
@@ -42,9 +42,9 @@ the config provided in your config files.
 config :doppler_config_provider,
   service_token: System.fetch_env!("DOPPLER_TOKEN"),
   mappings: %{
-    "DATABASE_URL" => {:my_app, MyApp.Repo, :url},
-    "SECRET_KEY_BASE" => {:my_app, MyAppWeb.Endpoint, :secret_key_base},
-    "STRIPE_SECRET_KEY" => {:stripity_stripe, :api_key},
+    "DATABASE_URL" => [:my_app, MyApp.Repo, :url],
+    "SECRET_KEY_BASE" => [:my_app, MyAppWeb.Endpoint, :secret_key_base],
+    "STRIPE_SECRET_KEY" => [:stripity_stripe, :api_key],
   }
 ```
 

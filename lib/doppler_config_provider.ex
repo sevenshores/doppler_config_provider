@@ -54,17 +54,21 @@ defmodule DopplerConfigProvider do
 
     Enum.reduce(doppler_config, config, fn {doppler_key, value}, acc ->
       case Map.get(opts.mappings, doppler_key) do
-        {app, module, key} ->
-          Config.Reader.merge(acc, [{app, [{module, [{key, value}]}]}])
-
-        {app, key} ->
-          Config.Reader.merge(acc, [{app, [{key, value}]}])
-
         nil ->
           Logger.warn("[DopplerConfigProvider] Unhandled doppler config `#{doppler_key}`")
           acc
+
+        keys ->
+          Config.Reader.merge(acc, nested_options(keys, value))
       end
     end)
+  end
+
+  # Build the nested options list for deep merging the config.
+  defp nested_options([key], value), do: [{key, value}]
+
+  defp nested_options([key | rest], value) do
+    [{key, nested_options(rest, value)}]
   end
 
   @doc """
