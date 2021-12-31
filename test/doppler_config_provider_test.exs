@@ -68,7 +68,7 @@ defmodule DopplerConfigProviderTest do
 
   test "merges config with warnings", %{app_config: app_config} do
     service_token = "foobar"
-    expected_headers = ["authorization", "Basic " <> Base.encode64(service_token <> ":")]
+    expected_headers = [{"authorization", "Basic " <> Base.encode64(service_token <> ":")}]
 
     expect(Mojito, :request, fn _url, ^expected_headers ->
       {:ok, %{status_code: 200, body: @doppler_body_extra}}

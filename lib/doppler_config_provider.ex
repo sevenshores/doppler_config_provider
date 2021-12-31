@@ -83,7 +83,7 @@ defmodule DopplerConfigProvider do
       opts.service_token
       |> Kernel.<>(":")
       |> Base.encode64()
-      |> then(&["authorization", "Basic " <> &1])
+      |> then(&[{"authorization", "Basic " <> &1}])
 
     case opts.http_module.request(url, headers) do
       {:ok, %{status_code: 200, body: body}} ->
