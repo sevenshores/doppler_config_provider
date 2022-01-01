@@ -47,7 +47,12 @@ defmodule DopplerConfigProvider do
   @impl Config.Provider
   def load(config, opts) do
     Logger.info("[DopplerConfigProvider] Loading Doppler config...")
-    opts = merge_opts_to_map(opts)
+
+    opts =
+      config
+      |> Keyword.get(:doppler_config_provider, [])
+      |> merge_opts_to_map(opts)
+
     doppler_config = fetch_doppler_config!(opts)
 
     Enum.reduce(doppler_config, config, fn {doppler_key, value}, acc ->
@@ -148,14 +153,12 @@ defmodule DopplerConfigProvider do
     end
   end
 
-  defp merge_opts_to_map(opts) do
-    :doppler_config_provider
-    |> Application.get_all_env()
-    |> Keyword.take([:service_token, :http_module, :json_module, :mappings])
-    |> Keyword.merge(opts)
-    |> Enum.into(%{
-      http_module: http_module_from_opts(opts),
-      json_module: json_module_from_opts(opts)
-    })
+  defp merge_opts_to_map(app_config, opts) do
+    config = Keyword.merge(app_config, opts)
+
+    config
+    |> Enum.into(%{})
+    |> Map.put(:http_module, http_module_from_opts(config))
+    |> Map.put(:json_module, json_module_from_opts(config))
   end
 end
