@@ -14,7 +14,7 @@ The package can be installed by adding `:doppler_config_provider` to your list o
 ```elixir
 def deps do
   [
-    {:doppler_config_provider, "~> 0.2.3"},
+    {:doppler_config_provider, "~> 0.2.4"},
     # Mojito is optional, but it is the default if you don't specify `:http_module` in options.
     {:mojito, "~> 0.7.10"},
   ]

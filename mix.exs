@@ -4,7 +4,7 @@ defmodule DopplerConfigProvider.MixProject do
   def project do
     [
       app: :doppler_config_provider,
-      version: "0.2.3",
+      version: "0.2.4",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,

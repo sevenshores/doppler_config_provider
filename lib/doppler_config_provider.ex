@@ -53,7 +53,10 @@ defmodule DopplerConfigProvider do
       |> Keyword.get(:doppler_config_provider, [])
       |> merge_opts_to_map(opts)
 
-    doppler_config = fetch_doppler_config!(opts)
+    doppler_config =
+      opts
+      |> fetch_doppler_config!()
+      |> Map.drop(~w(DOPPLER_CONFIG DOPPLER_ENVIRONMENT DOPPLER_PROJECT))
 
     Enum.reduce(doppler_config, config, fn {doppler_key, value}, acc ->
       case Map.get(opts.mappings, doppler_key) do
@@ -86,11 +89,7 @@ defmodule DopplerConfigProvider do
   end
 
   def fetch_doppler_config!(opts, url) do
-    headers =
-      opts.service_token
-      |> Kernel.<>(":")
-      |> Base.encode64()
-      |> then(&[{"authorization", "Basic " <> &1}])
+    headers = [{"authorization", "Basic " <> Base.encode64(opts.service_token <> ":")}]
 
     case opts.http_module.request(url, headers) do
       {:ok, %{status_code: 200, body: body}} ->
