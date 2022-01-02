@@ -9,9 +9,9 @@ defmodule DopplerConfigProvider do
 
   @type service_token :: String.t()
 
-  @type http_module :: module() | {atom(), module()}
+  @type http_module :: module() | {module(), atom() | [atom()]}
 
-  @type json_module :: module() | {atom(), module()}
+  @type json_module :: module() | {module(), atom() | [atom()]}
 
   @type mappings :: %{required(String.t()) => [key :: term()]}
 
@@ -83,7 +83,7 @@ defmodule DopplerConfigProvider do
   @spec fetch_doppler_config!(map_options(), String.t()) :: map() | no_return()
   def fetch_doppler_config!(opts, url \\ @doppler_url)
 
-  def fetch_doppler_config!(%{http_module: {http_apps, http_module}} = opts, url) do
+  def fetch_doppler_config!(%{http_module: {http_module, http_apps}} = opts, url) do
     ensure_all_started!(http_apps)
     fetch_doppler_config!(%{opts | http_module: http_module}, url)
   end
@@ -104,7 +104,7 @@ defmodule DopplerConfigProvider do
   Perform the JSON decoding with the provided JSON module.
   """
   @spec json_decode!(String.t(), map_options()) :: map() | no_return()
-  def json_decode!(body, %{json_module: {json_apps, json_module}} = opts) do
+  def json_decode!(body, %{json_module: {json_module, json_apps}} = opts) do
     ensure_all_started!(json_apps)
     json_decode!(body, %{opts | json_module: json_module})
   end
@@ -128,7 +128,7 @@ defmodule DopplerConfigProvider do
     case Keyword.get(opts, :http_module) do
       nil ->
         if Code.ensure_loaded?(Mojito) do
-          {:mojito, DopplerConfigProvider.HTTPClient.MojitoClient}
+          {DopplerConfigProvider.HTTPClient.MojitoClient, :mojito}
         else
           raise ArgumentError,
             message: "Must include :http_module, or add :mojito as a dependency"
@@ -146,10 +146,10 @@ defmodule DopplerConfigProvider do
       nil ->
         cond do
           Code.ensure_loaded?(Jason) ->
-            {:jason, Jason}
+            {Jason, :jason}
 
           Code.ensure_loaded?(Poison) ->
-            {:poison, Poison}
+            {Poison, :poison}
 
           true ->
             raise ArgumentError,

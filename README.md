@@ -14,7 +14,7 @@ The package can be installed by adding `:doppler_config_provider` to your list o
 ```elixir
 def deps do
   [
-    {:doppler_config_provider, "~> 0.3.0"},
+    {:doppler_config_provider, "~> 0.4.0"},
     # Mojito is optional, but it is the default if you don't specify `:http_module` in options.
     {:mojito, "~> 0.7.10"},
   ]
@@ -30,12 +30,13 @@ end
 ### Options
 
  * `:service_token` (required) - The Doppler service token.
- * `:http_module` (optional) - The HTTP client module. Defaults to `{:mojito, Mojito}`. Should implement `DopplerConfigProvider.HTTPClient` behaviour.
- * `:json_module` (optional) - The JSON decoding module. Defaults to `{:jason, Jason}` or `{:poison, Poison}`. Should implement `DopplerConfigProvider.JSONDecoder` behaviour.
+ * `:http_module` (optional) - The HTTP client module. Defaults to `{Mojito, :mojito}`. Should implement `DopplerConfigProvider.HTTPClient` behaviour.
+ * `:json_module` (optional) - The JSON decoding module. Defaults to `{Jason, :jason}` or `{Poison, :poison}`. Should implement `DopplerConfigProvider.JSONDecoder` behaviour.
  * `:mappings` (required) - A map specifying how to translate the Doppler config to application config.
 
-Note: The options provided to the config provider in `releases` are merged with
-the config provided in your config files.
+The `:http_module` and `:json_module` options can take either a module (e.g. `MyApp.Foobar`) or a tuple with the module
+and the apps that need to be started for the module to work properly (e.g. `{MyApp.Foobar, :mojito}` or `{MyApp.Foobar, [:tesla, :hackney]}`).
+
 ### Config example:
 
 ```elixir
@@ -52,15 +53,16 @@ config :doppler_config_provider,
 
 ```elixir
 releases: [
-  release_name: [
-    include_executables_for: [:unix],
-    applications: [
-      runtime_tools: :permanent,
-      app_name_here: :permanent
-    ],
+  my_app: [
+    # ...
     config_providers: [
-      {DopplerConfigProvider, http_module: {[:tesla, :hackney], MyDopplerHTTPClient}}
+      {DopplerConfigProvider, http_module: {MyDopplerHTTPClient, [:tesla, :hackney]}}
     ]
   ]
 ],
 ```
+
+Notes:
+
+ * The options provided to the config provider in `releases` are merged with
+the config provided in your config files. The options passed in `mix.exs` take precedence.
