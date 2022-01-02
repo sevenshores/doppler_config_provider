@@ -128,7 +128,7 @@ defmodule DopplerConfigProvider do
     case Keyword.get(opts, :http_module) do
       nil ->
         if Code.ensure_loaded?(Mojito) do
-          {DopplerConfigProvider.HTTPClient.MojitoClient, :mojito}
+          {Mojito, :mojito}
         else
           raise ArgumentError,
             message: "Must include :http_module, or add :mojito as a dependency"
