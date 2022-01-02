@@ -46,7 +46,7 @@ defmodule DopplerConfigProvider do
   """
   @impl Config.Provider
   def load(config, opts) do
-    Logger.info("[DopplerConfigProvider] Loading Doppler config...")
+    Logger.info("[DopplerConfigProvider] Loading Doppler config")
 
     opts =
       config
@@ -61,7 +61,7 @@ defmodule DopplerConfigProvider do
     Enum.reduce(doppler_config, config, fn {doppler_key, value}, acc ->
       case Map.get(opts.mappings, doppler_key) do
         nil ->
-          Logger.warn("[DopplerConfigProvider] Unhandled doppler config `#{doppler_key}`")
+          Logger.warn("[DopplerConfigProvider] Unhandled Doppler config: `#{doppler_key}`")
           acc
 
         keys ->

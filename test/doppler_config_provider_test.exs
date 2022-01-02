@@ -21,6 +21,8 @@ defmodule DopplerConfigProviderTest do
   }
   """
 
+  @doppler_body_401 ~s({"messages": ["Invalid Auth token"], "success": false})
+
   setup do
     app_config = [
       doppler_config_provider: [
@@ -104,6 +106,25 @@ defmodule DopplerConfigProviderTest do
                ]
       end)
 
-    assert log =~ "[DopplerConfigProvider] Unhandled doppler config `FOOBAR`"
+    assert log =~ "[DopplerConfigProvider] Unhandled Doppler config: `FOOBAR`"
+  end
+
+  test "raises error when doppler API returns error", %{app_config: app_config} do
+    expect(Mojito, :request, fn :get, _url, _headers ->
+      {:ok, %{status_code: 401, body: @doppler_body_401}}
+    end)
+
+    opts = [
+      service_token: "notvalid",
+      mappings: %{
+        "STRIPE_SECRET" => [:stripity_stripe, :api_key],
+        "STRIPE_PUBLIC" => [:stripity_stripe, :public_key],
+        "DATABASE_URL" => [:doppler_config_provider, DopplerConfigProvider.Repo, :url]
+      }
+    ]
+
+    assert_raise RuntimeError, ~r/Unable to fetch Doppler config:/, fn ->
+      assert config = DopplerConfigProvider.load(app_config, opts)
+    end
   end
 end
