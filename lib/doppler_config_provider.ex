@@ -83,15 +83,15 @@ defmodule DopplerConfigProvider do
   @spec fetch_doppler_config!(map_options(), String.t()) :: map() | no_return()
   def fetch_doppler_config!(opts, url \\ @doppler_url)
 
-  def fetch_doppler_config!(%{http_module: {http_app, http_module}} = opts, url) do
-    {:ok, _} = Application.ensure_all_started(http_app)
+  def fetch_doppler_config!(%{http_module: {http_apps, http_module}} = opts, url) do
+    ensure_all_started!(http_apps)
     fetch_doppler_config!(%{opts | http_module: http_module}, url)
   end
 
   def fetch_doppler_config!(opts, url) do
     headers = [{"authorization", "Basic " <> Base.encode64(opts.service_token <> ":")}]
 
-    case opts.http_module.request(url, headers) do
+    case opts.http_module.request(:get, url, headers) do
       {:ok, %{status_code: 200, body: body}} ->
         json_decode!(body, opts)
 
@@ -104,13 +104,22 @@ defmodule DopplerConfigProvider do
   Perform the JSON decoding with the provided JSON module.
   """
   @spec json_decode!(String.t(), map_options()) :: map() | no_return()
-  def json_decode!(body, %{json_module: {json_app, json_module}} = opts) do
-    {:ok, _} = Application.ensure_all_started(json_app)
+  def json_decode!(body, %{json_module: {json_apps, json_module}} = opts) do
+    ensure_all_started!(json_apps)
     json_decode!(body, %{opts | json_module: json_module})
   end
 
   def json_decode!(body, opts) do
     opts.json_module.decode!(body)
+  end
+
+  # Since we are running this early in the boot process, applications may not be
+  # started and should be passed in to the config to ensure they are started before
+  # using them.
+  defp ensure_all_started!(apps) do
+    apps
+    |> List.wrap()
+    |> Enum.each(&({:ok, _} = Application.ensure_all_started(&1)))
   end
 
   # Get the HTTP module from the opts or provide a default (if the dependency exists).

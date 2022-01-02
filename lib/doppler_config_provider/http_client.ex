@@ -9,5 +9,5 @@ defmodule DopplerConfigProvider.HTTPClient do
   @type headers :: [{String.t(), String.t()}]
   @type response :: %{status_code: pos_integer(), body: binary()}
 
-  @callback request(url(), headers()) :: {:ok, response()} | {:error, any()}
+  @callback request(:get, url(), headers()) :: {:ok, response()} | {:error, any()}
 end

@@ -5,7 +5,7 @@ if Code.ensure_loaded?(Mojito) do
     @behaviour DopplerConfigProvider.HTTPClient
 
     @impl DopplerConfigProvider.HTTPClient
-    def request(url, headers) do
+    def request(:get, url, headers) do
       Mojito.request(:get, url, headers)
     end
   end

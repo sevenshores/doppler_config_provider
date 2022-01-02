@@ -70,7 +70,7 @@ defmodule DopplerConfigProviderTest do
     service_token = "foobar"
     expected_headers = [{"authorization", "Basic " <> Base.encode64(service_token <> ":")}]
 
-    expect(Mojito, :request, fn _url, ^expected_headers ->
+    expect(Mojito, :request, fn :get, _url, ^expected_headers ->
       {:ok, %{status_code: 200, body: @doppler_body_extra}}
     end)
 
