@@ -5,6 +5,8 @@ defmodule DopplerConfigProvider do
   """
   @behaviour Config.Provider
 
+  import DopplerConfigProvider.Util
+
   require Logger
 
   @type service_token :: String.t()
@@ -127,7 +129,7 @@ defmodule DopplerConfigProvider do
   defp http_module_from_opts(opts) do
     case Keyword.get(opts, :http_module) do
       nil ->
-        if Code.ensure_loaded?(Mojito) do
+        if ensure_loaded?(Mojito) do
           {Mojito, :mojito}
         else
           raise ArgumentError,
@@ -145,10 +147,10 @@ defmodule DopplerConfigProvider do
     case Keyword.get(opts, :json_module) do
       nil ->
         cond do
-          Code.ensure_loaded?(Jason) ->
+          ensure_loaded?(Jason) ->
             {Jason, :jason}
 
-          Code.ensure_loaded?(Poison) ->
+          ensure_loaded?(Poison) ->
             {Poison, :poison}
 
           true ->

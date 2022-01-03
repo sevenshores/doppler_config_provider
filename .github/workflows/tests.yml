@@ -56,6 +56,12 @@ jobs:
       - name: Run tests
         run: mix test
 
+      - name: Coveralls
+        run: mix coveralls.github
+        env:
+          MIX_ENV: test
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       # Don't cache PLTs based on mix.lock hash, as Dialyzer can incrementally update even old ones
       # Cache key based on Elixir & Erlang version (also usefull when running in matrix)
       - name: Restore PLT cache

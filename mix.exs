@@ -14,7 +14,14 @@ defmodule DopplerConfigProvider.MixProject do
       docs: docs(),
       dialyzer: [plt_file: {:no_warn, "priv/plts/dialyzer.plt"}],
       source_url: "https://github.com/sevenshores/doppler_config_provider",
-      homepage_url: "https://github.com/sevenshores/doppler_config_provider"
+      homepage_url: "https://github.com/sevenshores/doppler_config_provider",
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -37,7 +44,8 @@ defmodule DopplerConfigProvider.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.26", only: :dev, runtime: false},
-      {:mimic, "~> 1.5", only: :test}
+      {:mimic, "~> 1.5", only: :test},
+      {:excoveralls, "~> 0.14.4", only: :test}
     ]
   end
 

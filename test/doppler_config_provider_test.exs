@@ -109,7 +109,7 @@ defmodule DopplerConfigProviderTest do
     assert log =~ "[DopplerConfigProvider] Unhandled Doppler config: `FOOBAR`"
   end
 
-  test "raises error when doppler API returns error", %{app_config: app_config} do
+  test "raises error when doppler API returns error status", %{app_config: app_config} do
     expect(Mojito, :request, fn :get, _url, _headers ->
       {:ok, %{status_code: 401, body: @doppler_body_401}}
     end)
@@ -124,7 +124,53 @@ defmodule DopplerConfigProviderTest do
     ]
 
     assert_raise RuntimeError, ~r/Unable to fetch Doppler config:/, fn ->
-      assert config = DopplerConfigProvider.load(app_config, opts)
+      DopplerConfigProvider.load(app_config, opts)
     end
+  end
+
+  test "raises an error when no :http_module and no default dependency", %{app_config: app_config} do
+    reject(&Mojito.request/3)
+
+    DopplerConfigProvider.Util
+    |> stub(:ensure_loaded?, fn _ -> true end)
+    |> expect(:ensure_loaded?, fn Mojito -> false end)
+
+    opts = [
+      service_token: "foobar",
+      mappings: %{
+        "STRIPE_SECRET" => [:stripity_stripe, :api_key],
+        "STRIPE_PUBLIC" => [:stripity_stripe, :public_key],
+        "DATABASE_URL" => [:doppler_config_provider, DopplerConfigProvider.Repo, :url]
+      }
+    ]
+
+    assert_raise ArgumentError, "Must include :http_module, or add :mojito as a dependency", fn ->
+      DopplerConfigProvider.load(app_config, opts)
+    end
+  end
+
+  test "raises an error when no :json_module and no default dependency", %{app_config: app_config} do
+    reject(&Mojito.request/3)
+
+    DopplerConfigProvider.Util
+    |> stub(:ensure_loaded?, fn _ -> true end)
+    |> expect(:ensure_loaded?, fn Mojito -> true end)
+    |> expect(:ensure_loaded?, fn Jason -> false end)
+    |> expect(:ensure_loaded?, fn Poison -> false end)
+
+    opts = [
+      service_token: "foobar",
+      mappings: %{
+        "STRIPE_SECRET" => [:stripity_stripe, :api_key],
+        "STRIPE_PUBLIC" => [:stripity_stripe, :public_key],
+        "DATABASE_URL" => [:doppler_config_provider, DopplerConfigProvider.Repo, :url]
+      }
+    ]
+
+    assert_raise ArgumentError,
+                 "Must include :json_module, or add :jason or :poison as a dependency",
+                 fn ->
+                   DopplerConfigProvider.load(app_config, opts)
+                 end
   end
 end

@@ -160,7 +160,6 @@
 
           # controversial
           {Credo.Check.Consistency.MultiAliasImportRequireUse, []},
-          {Credo.Check.Consistency.UnusedVariableNames, []},
           {Credo.Check.Design.DuplicatedCode, []},
           {Credo.Check.Design.SkipTestWithoutComment, []},
           {Credo.Check.Readability.AliasAs, []},
@@ -192,6 +191,7 @@
         disabled: [
           #
           # Checks scheduled for next check update (opt-in for now, just replace `false` with `[]`)
+          {Credo.Check.Consistency.UnusedVariableNames, false},
           {Credo.Check.Warning.LazyLogging, false},
 
           #
