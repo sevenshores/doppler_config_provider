@@ -5,7 +5,7 @@ defmodule DopplerConfigProvider do
   """
   @behaviour Config.Provider
 
-  import DopplerConfigProvider.Util
+  import DopplerConfigProvider.Util, only: [ensure_loaded?: 1]
 
   require Logger
 
@@ -47,6 +47,7 @@ defmodule DopplerConfigProvider do
   Loads configuration and is typically invoked very early in the boot process.
   """
   @impl Config.Provider
+  @spec load(keyword(), options()) :: keyword()
   def load(config, opts) do
     Logger.info("[DopplerConfigProvider] Loading Doppler config")
 
